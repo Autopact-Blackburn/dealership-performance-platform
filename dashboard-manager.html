@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Manager Dashboard</title>
+  <link rel="stylesheet" href="./css/app.css" />
+  <link rel="stylesheet" href="./css/dashboard.css" />
+  <link rel="stylesheet" href="./css/modals.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Manager View</p>
+      <h1>Team Commissions</h1>
+    </div>
+    <select id="periodSelect" class="control">
+      <option>April 2026</option>
+    </select>
+  </header>
+
+  <main class="shell">
+    <section id="summaryCards" class="card-grid"></section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <h2>Team Performance</h2>
+          <p class="muted">Clean overview first. Drill into a salesperson only when needed.</p>
+        </div>
+      </div>
+      <div class="responsive-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Salesperson</th>
+              <th>Units</th>
+              <th>Finance %</th>
+              <th>Aftercare PPV</th>
+              <th>Accessory GP</th>
+              <th>Total Comm</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="teamRows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="reviewModal" class="modal">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">Performance Review Mode</p>
+        <h2 id="reviewTitle">Salesperson Review</h2>
+      </div>
+      <button id="closeReview" class="icon-button">×</button>
+    </div>
+    <div id="reviewBody" class="modal-body"></div>
+  </dialog>
+
+  <script type="module" src="./js/dashboards/manager-dashboard.js"></script>
+</body>
+</html>

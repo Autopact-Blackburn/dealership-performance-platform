@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Performance</title>
+  <link rel="stylesheet" href="./css/app.css" />
+  <link rel="stylesheet" href="./css/dashboard.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Salesperson View</p>
+      <h1>My Performance</h1>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section id="personalSummary" class="card-grid"></section>
+
+    <section class="panel">
+      <h2>Top 3 Focus Areas</h2>
+      <ol id="focusAreas" class="focus-list"></ol>
+    </section>
+
+    <section class="panel">
+      <h2>Commission Simulator</h2>
+      <p class="muted">Plug in theoretical month-end numbers. This does not change your official results.</p>
+      <form id="simulatorForm" class="sim-grid">
+        <label>Units <input name="units" type="number" value="16" /></label>
+        <label>KPI Bonus Pool <input name="bonusPool" type="number" value="2500" /></label>
+        <label>Direct Purchases <input name="directPurchases" type="number" value="2" /></label>
+        <button class="button primary" type="submit">Calculate</button>
+      </form>
+      <div id="simulatorResult" class="result-card"></div>
+    </section>
+  </main>
+
+  <script type="module" src="./js/dashboards/salesperson-dashboard.js"></script>
+</body>
+</html>

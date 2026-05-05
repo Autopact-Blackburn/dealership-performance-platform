@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <title>Login | Dealership Performance</title>
+
+  <link rel="stylesheet" href="./css/app.css" />
+</head>
+
+<body>
+
+  <main class="shell narrow">
+
+    <section class="panel">
+
+      <p class="eyebrow">Secure Access</p>
+
+      <h1>Log in</h1>
+
+      <form id="loginForm" class="form-stack">
+
+        <label>
+          Email
+          <input
+            id="email"
+            type="email"
+            placeholder="name@dealership.com.au"
+            required
+          />
+        </label>
+
+        <label>
+          Password
+          <input
+            id="password"
+            type="password"
+            required
+          />
+        </label>
+
+        <button
+          class="button primary"
+          type="submit"
+        >
+          Continue
+        </button>
+
+      </form>
+
+      <p id="loginMessage" class="muted small"></p>
+
+    </section>
+
+  </main>
+
+  <script type="module" src="./js/shared/api.js"></script>
+  <script type="module" src="./js/auth/login.js"></script>
+
+</body>
+</html>
