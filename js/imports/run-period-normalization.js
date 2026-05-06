@@ -1,7 +1,9 @@
 import { groupRowDataByImportType, mergeDealLogAnchoredDeals } from '../calculations/normalization-merge.js';
 import { enrichSalespersonMetrics } from '../calculations/normalization-metrics.js';
+import { applyCommissionForPersistence } from '../calculations/normalization-commission.js';
 import {
   fetchRawImportRowsForPeriod,
+  fetchManualBonusesByPeriod,
   upsertMasterDealsForPeriod,
   upsertSalespersonMetricsForPeriod
 } from './master-data-service.js';
@@ -47,11 +49,33 @@ export async function runPeriodNormalization(periodId, options = {}) {
     groups.reviews
   );
 
+  let manualByName = new Map();
+  if (persist) {
+    const manualRes = await fetchManualBonusesByPeriod(periodId);
+    if (manualRes.ok) {
+      manualByName = new Map(
+        manualRes.data.map(r => [
+          r.salesperson_name,
+          Number(r.manual_bonus_total) || 0
+        ])
+      );
+    }
+  }
+
+  const enrichedWithManual = enriched.map(m => ({
+    ...m,
+    manualBonuses: manualByName.get(m.salesperson) ?? 0
+  }));
+
+  const enrichedWithCommission = applyCommissionForPersistence(
+    enrichedWithManual
+  );
+
   if (!persist) {
     return {
       ok: true,
       masterDeals: merged.masterDealsRecords,
-      metrics: enriched,
+      metrics: enrichedWithCommission,
       persisted: false
     };
   }
@@ -66,7 +90,7 @@ export async function runPeriodNormalization(periodId, options = {}) {
 
   const metricsRes = await upsertSalespersonMetricsForPeriod(
     periodId,
-    enriched
+    enrichedWithCommission
   );
   if (!metricsRes.ok) {
     return { ok: false, error: metricsRes.error, stage: 'persist_metrics' };

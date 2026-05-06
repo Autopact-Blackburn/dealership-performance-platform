@@ -4,35 +4,39 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>My Performance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./css/app.css" />
   <link rel="stylesheet" href="./css/dashboard.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div>
-      <p class="eyebrow">Salesperson View</p>
-      <h1>My Performance</h1>
+  <header class="topbar topbar--dashboard">
+    <div class="topbar__titles">
+      <p class="eyebrow">Salesperson view</p>
+      <h1>My performance</h1>
+    </div>
+    <div class="topbar__actions">
+      <label class="sr-only" for="periodSelect">Commission period</label>
+      <select id="periodSelect" class="control control--period" aria-label="Commission period"></select>
     </div>
   </header>
 
-  <main class="shell">
-    <section id="personalSummary" class="card-grid"></section>
+  <main class="shell shell--dashboard">
+    <p id="dashboardStatus" class="dashboard-status" hidden></p>
+    <section id="personalSummary" class="card-grid card-grid--summary"></section>
 
-    <section class="panel">
-      <h2>Top 3 Focus Areas</h2>
+    <section class="panel panel--soft">
+      <h2>Top 3 focus areas</h2>
       <ol id="focusAreas" class="focus-list"></ol>
     </section>
 
-    <section class="panel">
-      <h2>Commission Simulator</h2>
-      <p class="muted">Plug in theoretical month-end numbers. This does not change your official results.</p>
-      <form id="simulatorForm" class="sim-grid">
-        <label>Units <input name="units" type="number" value="16" /></label>
-        <label>KPI Bonus Pool <input name="bonusPool" type="number" value="2500" /></label>
-        <label>Direct Purchases <input name="directPurchases" type="number" value="2" /></label>
-        <button class="button primary" type="submit">Calculate</button>
-      </form>
-      <div id="simulatorResult" class="result-card"></div>
+    <section class="panel panel--note">
+      <h2>About your commission</h2>
+      <p class="muted note-lead">
+        Published commission totals are calculated when your manager runs period normalization.
+        They are stored securely and shown here—this page does not recalculate pay.
+      </p>
     </section>
   </main>
 

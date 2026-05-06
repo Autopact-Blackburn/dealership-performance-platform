@@ -1,5 +1,17 @@
 import { supabase } from '../shared/api.js';
 
+export async function fetchManualBonusesByPeriod(periodId) {
+  const { data, error } = await supabase
+    .from('salesperson_monthly_metrics')
+    .select('salesperson_name, manual_bonus_total')
+    .eq('period_id', periodId);
+
+  if (error) {
+    return { ok: false, data: [], error };
+  }
+  return { ok: true, data: data || [], error: null };
+}
+
 export async function fetchRawImportRowsForPeriod(periodId) {
   const { data, error } = await supabase
     .from('raw_import_rows')
@@ -70,9 +82,9 @@ export async function upsertSalespersonMetricsForPeriod(periodId, enrichedRows) 
     nps: m.nps,
     dah: m.dah,
     direct_purchases: m.directPurchases,
-    calculated_commission: 0,
-    manual_bonus_total: 0,
-    final_commission: 0,
+    calculated_commission: m.calculatedCommission ?? 0,
+    manual_bonus_total: m.manualBonuses ?? 0,
+    final_commission: m.finalCommission ?? 0,
     generated_at: now
   }));
 
