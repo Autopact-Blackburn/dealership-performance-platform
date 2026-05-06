@@ -291,6 +291,44 @@
     </section>
 
     <!-- ===================================================== -->
+    <!-- NORMALIZATION -->
+    <!-- ===================================================== -->
+
+    <section class="panel">
+
+      <div class="section-head">
+        <div>
+          <h2>Normalize period</h2>
+          <p class="muted">
+            Uses Deal Log as the anchor; other imports attach by Deal Number.
+            Enter the commission period UUID (same as raw row period_id).
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="button secondary"
+          id="runNormalizationBtn"
+        >
+          Run normalization
+        </button>
+
+      </div>
+
+      <label class="muted" for="normalizationPeriodId">
+        Commission period ID
+      </label>
+      <input
+        id="normalizationPeriodId"
+        class="control"
+        type="text"
+        placeholder="e.g. uuid from commission_periods"
+        autocomplete="off"
+      />
+
+    </section>
+
+    <!-- ===================================================== -->
     <!-- RESULTS -->
     <!-- ===================================================== -->
 
@@ -319,6 +357,7 @@
 
   <script type="module" src="./js/shared/api.js"></script>
   <script type="module" src="./js/imports/import-page.js"></script>
+  <script type="module" src="./js/imports/normalization-trigger.js"></script>
 
 </body>
 

@@ -1,7 +1,18 @@
-import { supabase } from '../shared/api.js'
 import { parseDelimitedText } from './csv-parser.js'
+import { buildStoredRowRecords } from './import-calculators.js'
+import { persistRawImport } from './raw-import-service.js'
 
 const importButtons = document.querySelectorAll('.import-btn')
+
+function getPeriodIdForImport() {
+
+  const el = document.querySelector('#normalizationPeriodId')
+
+  return el && el.value.trim()
+    ? el.value.trim()
+    : null
+
+}
 
 let totalRowsImported = 0
 let completedImports = 0
@@ -75,72 +86,18 @@ async function processImport(importType, rawText) {
 
     }
 
-    // =========================================
-    // CREATE IMPORT BATCH
-    // =========================================
+    const rowRecords = buildStoredRowRecords(importType, headers, rows)
 
-    const { data: batchData, error: batchError } =
-      await supabase
-        .from('raw_import_batches')
-        .insert({
-          import_type: importType,
-          source_filename: `${importType}_${Date.now()}.txt`,
-          row_count: rows.length
-        })
-        .select()
-        .single()
-
-    if (batchError) {
-
-      console.error(batchError)
-
-      showResult(
-        `${importType} batch creation failed.`,
-        'error'
-      )
-
-      return
-
-    }
-
-    // =========================================
-    // BUILD RAW ROW OBJECTS
-    // =========================================
-
-    const payload = rows.map((row, index) => {
-
-      const rowObject = {}
-
-      headers.forEach((header, headerIndex) => {
-
-        rowObject[header] = row[headerIndex]
-
-      })
-
-      return {
-        batch_id: batchData.id,
-        import_type: importType,
-        row_number: index + 1,
-        row_data: rowObject
-      }
-
+    const result = await persistRawImport(importType, rowRecords, {
+      periodId: getPeriodIdForImport()
     })
 
-    // =========================================
-    // INSERT RAW ROWS
-    // =========================================
+    if (!result.ok) {
 
-    const { error: rowInsertError } =
-      await supabase
-        .from('raw_import_rows')
-        .insert(payload)
-
-    if (rowInsertError) {
-
-      console.error(rowInsertError)
+      console.error(result.error)
 
       showResult(
-        `${importType} row import failed.`,
+        `${result.error?.message || importType} import failed.`,
         'error'
       )
 
@@ -148,13 +105,13 @@ async function processImport(importType, rawText) {
 
     }
 
-    totalRowsImported += rows.length
+    totalRowsImported += result.rowCount
     completedImports += 1
 
     updateOverviewCards()
 
     showResult(
-      `${importType} imported successfully. ${rows.length} rows processed.`
+      `${importType} imported successfully. ${result.rowCount} rows processed.`
     )
 
     console.log(

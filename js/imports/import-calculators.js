@@ -1,5 +1,37 @@
-import { mapRow } from '../shared/header-mapping.js';
+import { mapRow, CANONICAL_FIELD_KEYS } from '../shared/header-mapping.js';
 import { toNumber } from '../shared/utils.js';
+
+/**
+ * Normalised row payloads for persistence (canonical keys via mapRow / normalisers).
+ */
+export function buildStoredRowRecords(importType, headers, rows) {
+  switch (importType) {
+    case 'signups':
+      return normaliseSignUps(headers, rows);
+    case 'deal_log':
+      return normaliseDealLog(headers, rows);
+    case 'accessories':
+      return normaliseAccessories(headers, rows);
+    case 'finance':
+      return normaliseFinance(headers, rows);
+    case 'aftercare':
+      return normaliseAftercare(headers, rows);
+    case 'leads':
+      return normaliseLeads(headers, rows);
+    case 'reviews':
+      return normaliseReviews(headers, rows);
+    default:
+      throw new Error(`Unknown import type: ${importType}`);
+  }
+}
+
+export function normaliseLeads(headers, rows) {
+  return rows.map(row => mapRow(headers, row, CANONICAL_FIELD_KEYS));
+}
+
+export function normaliseReviews(headers, rows) {
+  return rows.map(row => mapRow(headers, row, CANONICAL_FIELD_KEYS));
+}
 
 export function normaliseSignUps(headers, rows) {
   return rows.map(row => mapRow(headers, row, ['dealNumber', 'salesperson']));
