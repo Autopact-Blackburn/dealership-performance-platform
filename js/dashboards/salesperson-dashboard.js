@@ -111,7 +111,10 @@ async function loadPeriodsIntoSelect() {
     .join('');
 
   if (!res.data.length) {
-    setStatus('Create a commission period in Supabase to continue.', 'warn');
+    setStatus(
+      'No periods returned from the database. Add a commission_periods row—or if one already exists, add a permissive SELECT RLS policy for anon/authenticated (see sql/migrations/003_rls_commission_periods_select.sql).',
+      'warn'
+    );
     return null;
   }
 
